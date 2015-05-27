@@ -28,8 +28,9 @@
         android:layout_alignParentEnd="true"
         fab:fab_addButtonColorNormal="@color/pink"
         fab:fab_addButtonColorPressed="@color/pink_pressed"
-        fab:fab_addButtonPlusIconColor="@color/half_black"
+        fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style"
+        fab:
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp">
@@ -39,10 +40,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_icon="@drawable/ic_fab_star"
-            fab:fab_colorNormal="#000000"
+            fab:fab_colorNormal="@color/blue_semi_transparent"
+            fab:fab_colorDisabled="@color/blue_semi_transparent_disabled"
             fab:fab_title="טנקים"
-            fab:fab_colorPressed="@color/white_pressed" />
-
+            fab:fab_colorPressed="@color/blue_semi_transparent_pressed" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_b"
@@ -50,8 +51,9 @@
             android:layout_height="wrap_content"
             fab:fab_icon="@drawable/ic_fab_star"
             fab:fab_colorNormal="@color/blue_semi_transparent"
+            fab:fab_colorDisabled="@color/blue_semi_transparent_disabled"
             fab:fab_title="כלי רכב"
-            fab:fab_colorPressed="@color/white_pressed" />
+            fab:fab_colorPressed="@color/blue_semi_transparent_pressed"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

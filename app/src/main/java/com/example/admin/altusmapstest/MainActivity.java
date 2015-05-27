@@ -16,9 +16,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.crashlytics.android.Crashlytics;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -33,23 +35,32 @@ import us.ba3.me.markers.DynamicMarkerMapDelegate;
 import us.ba3.me.markers.DynamicMarkerMapInfo;
 
 
-public class MainActivity extends ActionBarActivity implements DynamicMarkerMapDelegate {
+public class MainActivity extends ActionBarActivity implements DynamicMarkerMapDelegate, View.OnClickListener {
 
     public final String MAP_NAME = "Map";
     public final String MARKERS_1 = "Markers1";
     public final String MARKERS_2 = "Markers2";
+    private FloatingActionButton firstButton;
+    private FloatingActionButton secondButton;
     private RelativeLayout layout;
     protected MyMapView mapView;
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Location> locations = new ArrayList<>();
+    private boolean firstButtonEnabled = true;
+    private boolean secondButtonEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (BuildConfig.USE_CRASHLYTICS) {
+        if (BuildConfig.USE_CRASHLYTICS) {
             Fabric.with(this, new Crashlytics());
-//        }
+        }
         setContentView(R.layout.activity_main);
+
+        firstButton = (FloatingActionButton) findViewById(R.id.action_a);
+        secondButton = (FloatingActionButton) findViewById(R.id.action_b);
+        firstButton.setOnClickListener(this);
+        secondButton.setOnClickListener(this);
 
         layout = (RelativeLayout) findViewById(R.id.layout);
 
@@ -99,18 +110,26 @@ public class MainActivity extends ActionBarActivity implements DynamicMarkerMapD
         );
 
         //Add dynamic marker layer
-        DynamicMarkerMapInfo mapInfo = new DynamicMarkerMapInfo();
-        mapInfo.zOrder = 2000;
-        mapInfo.name = this.MARKERS_1;
-        mapInfo.hitTestingEnabled = true;
-        mapInfo.delegate = this;
-        mapView.addMapUsingMapInfo(mapInfo);
+        DynamicMarkerMapInfo mapInfo1 = new DynamicMarkerMapInfo();
+        mapInfo1.zOrder = 2000;
+        mapInfo1.name = this.MARKERS_1;
+        mapInfo1.hitTestingEnabled = true;
+        mapInfo1.delegate = this;
+        mapView.addMapUsingMapInfo(mapInfo1);
+
+        //Add dynamic marker layer
+        DynamicMarkerMapInfo mapInfo2 = new DynamicMarkerMapInfo();
+        mapInfo2.zOrder = 1000;
+        mapInfo2.name = this.MARKERS_2;
+        mapInfo2.hitTestingEnabled = true;
+        mapInfo2.delegate = this;
+        mapView.addMapUsingMapInfo(mapInfo2);
 
         this.vehicles = new ArrayList<Vehicle>();
 
         Vehicle Car = new Vehicle("Car", Vehicle.Type.CAR, new Location(31.323364, 34.919594));
         Vehicle Bus = new Vehicle("Bus", Vehicle.Type.BUS, new Location(31.320, 34.919));
-        Vehicle Tank = new Vehicle("Tank", Vehicle.Type.TANK, new Location(31.324, 34.912));
+        Vehicle Tank = new Vehicle("Tank", Vehicle.Type.TANK, new Location(32.0, 34.0));
         Vehicle Tank1 = new Vehicle("Tank1", Vehicle.Type.TANK, new Location(31, 34));
         Vehicle Tank2 = new Vehicle("Tank2", Vehicle.Type.TANK, new Location(31.00, 32.012));
         Vehicle Tank3 = new Vehicle("Tank3", Vehicle.Type.TANK, new Location(32.324, 33.912));
@@ -232,6 +251,37 @@ public class MainActivity extends ActionBarActivity implements DynamicMarkerMapD
             PointF markerPoint) {
 
         Log.w("tapOnMarker", "map: " + mapName + ", marker: " + markerName + ", screenPoint: (" + screenPoint.x + ", " + screenPoint.y + "), markerPoint: (" + markerPoint.x + ", " + markerPoint.y + ")");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_a:
+                if (firstButtonEnabled){
+                    firstButton.setColorNormalResId(R.color.blue_semi_transparent_disabled);
+                }
+                else {
+//                    firstButton.getColorDisabled();
+                    firstButton.setColorNormalResId(R.color.blue_semi_transparent);
+                }
+
+                firstButtonEnabled = !firstButtonEnabled;
+                mapView.setMapIsVisible(MARKERS_1, firstButtonEnabled);
+
+                break;
+            case R.id.action_b:
+                if (secondButtonEnabled){
+                    secondButton.setColorNormalResId(R.color.blue_semi_transparent_disabled);
+                }
+                else {
+                    secondButton.setColorNormalResId(R.color.blue_semi_transparent);
+                }
+
+                secondButtonEnabled = !secondButtonEnabled;
+                mapView.setMapIsVisible(MARKERS_2, secondButtonEnabled);
+
+                break;
+        }
     }
 }
 
